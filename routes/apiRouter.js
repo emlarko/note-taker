@@ -1,19 +1,20 @@
 const api = require('express').Router();
 const uniqid = require('uniqid');
-const { readAndAppend, readFromFile } = require('../helpers/fsUtils');
+const { readAndAppend, readFromFile } = require('../helpers/fsUtils.js');
+const fs = require('fs');
 
-api.get('/', (req, res) =>
+api.get('/notes', (req, res) =>
 readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
 );
 
-api.post('/', (req, res) => {
+api.post('/notes', (req, res) => {
     const { title, text } = req.body;
 
-    if (title, text) {
+    if (title && text) {
         const newNote = {
             title,
             text,
-            noteId : uniqid
+            id : uniqid()
         };
         
         readAndAppend(newNote, './db/db.json');
@@ -27,5 +28,13 @@ api.post('/', (req, res) => {
           res.json('Error in posting feedback');
         }
 });
+
+api.delete('/notes/:id', (req, res) => {
+  let db = JSON.parse(fs.readFileSync('./db/db.json'))
+  let deleteNotes = db.filter(item => item.id !== req.params.id);
+  fs.writeFileSync('./db/db.json', JSON.stringify(deleteNotes));
+  res.json(deleteNotes);
+})
+;
 
 module.exports = api;
