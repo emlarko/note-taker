@@ -1,5 +1,7 @@
 # Express.js: Note Taker
 
+Deployed Heroku app: https://fathomless-lake-78730.herokuapp.com/
+
 ## Description
 
 The aim of this project was to modify starter code to create an application that can be used to write and save notes. The application uses an Express.js back end and saves and retrieves note data from a JSON file. 
